@@ -1,0 +1,36 @@
+<label for="cpb_form_input_{{ field.name }}" class="cpb_form_label cpb_form_label-select">
+    {{ field.display_name }}
+    {% if field.required %}*{% endif %}
+</label>
+
+<div class="cpb_form_input__wrapper">
+    <select id="cpb_form_input_{{ field.name }}" class="cpb_form_input cpb_form_input-select"
+           name="data[{{ field.name }}]" onchange="validate_on_change('{{ field.name }}')">
+        <option value='[0,"Не выбрано"]'>
+            Не выбрано
+        </option>
+
+        {% for option in field.options %}
+            <option value='[{{ option.0 }},"{{ option.1 }}"]'{% if value == option.0 %} selected{% endif %}>
+                {{ option.1 }}
+            </option>
+        {% endfor %}
+    </select>
+</div>
+
+{% if field.nested_on %}
+    <script type="text/javascript">
+        register_nested_select('{{ field.name }}', '{{ field.nested_on }}', '{{ field.nested_prefix }}');
+        {% if field.required %}
+        required_fields.push('{{ field.name }}');
+        {% endif %}
+    </script>
+{% else %}
+    {% if field.required %}
+        <script type="text/javascript">
+            required_fields.push('{{ field.name }}');
+        </script>
+    {% endif %}
+{% endif %}
+
+<div id="cpb_form_error_{{ field.name }}" class="cpb_form_error cpb_form_error-select"></div>

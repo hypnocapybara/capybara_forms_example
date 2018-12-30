@@ -1,0 +1,5 @@
+<label for="cpb_form_input_{{ field.name }}" class="cpb_form_label cpb_form_label-checkbox">
+    <input id="cpb_form_input_{{ field.name }}" {% if field.value %}checked{% endif %}
+           name="data[{{ field.name }}]" type="checkbox">
+    {{ field.display_name }}
+</label>

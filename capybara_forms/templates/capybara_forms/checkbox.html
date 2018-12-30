@@ -1,0 +1,15 @@
+<div class="cpb_form_cell"></div>
+<label for="cpb_form_input_{{ field.name }}" class="cpb_form_label cpb_form_label-checkbox">
+    <input id="cpb_form_input_{{ field.name }}" {% if value %}checked{% endif %}
+           name="data[{{ field.name }}]" type="checkbox"
+           {% if field.required %}onchange="validate_on_change('{{ field.name }}')"{% endif %}>
+    {{ field.display_name }}
+</label>
+
+<div id="cpb_form_error_{{ field.name }}" class="cpb_form_error cpb_form_error-checkbox"></div>
+
+{% if field.required %}
+    <script type="text/javascript">
+        required_fields.push('{{ field.name }}');
+    </script>
+{% endif %}

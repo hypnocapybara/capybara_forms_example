@@ -1,0 +1,20 @@
+{% if field.placeholder %}
+    <label for="cpb_form_input_{{ field.name }}" class="cpb_form_label cpb_form_label-number_select">
+        {{ field.display_name }}
+    </label>
+    <select id="cpb_form_input_{{ field.name }}" class="cpb_form_input cpb_form_input-number_select"
+           name="data[{{ field.name }}]">
+        <option value="0">Не выбрано</option>
+        {% for option in field.options %}
+            <option value="{{ option }}"{% if field.value == option %} selected{% endif %}>{{ option }}</option>
+        {% endfor %}
+    </select>
+{% else %}
+    <select id="cpb_form_input_{{ field.name }}" class="cpb_form_input cpb_form_input-number_select"
+           name="data[{{ field.name }}]">
+        <option value="0">Не выбрано</option>
+        {% for option in field.options %}
+            <option value="{{ option }}"{% if field.value == option %} selected{% endif %}>{{ option }}</option>
+        {% endfor %}
+    </select>
+{% endif %}
