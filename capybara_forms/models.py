@@ -3,8 +3,8 @@ from django.contrib.postgres.fields import JSONField
 
 
 class CapybaraFormsCategory(models.Model):
-    params = JSONField(verbose_name='Category fields', default={}, null=True)
-    search_params = JSONField(verbose_name='Filter fields', default={}, null=True)
+    params = JSONField(verbose_name='Category fields', default=dict, null=True)
+    search_params = JSONField(verbose_name='Filter fields', default=dict, null=True)
     form_template = models.TextField(
         blank=True, null=True)
     filter_template = models.TextField(

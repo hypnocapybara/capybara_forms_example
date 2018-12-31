@@ -3,6 +3,7 @@ from django import forms
 from capybara_forms.utils import get_advert_data_for_form_values, \
     validate_data, get_data_fields
 from capybara_forms.renderers.form import render_form_fields
+from capybara_forms.widgets import JSONEditorWidget
 
 
 class CapybaraFormsModelForm(forms.ModelForm):
@@ -54,4 +55,22 @@ class CapybaraFormsModelForm(forms.ModelForm):
     def render_fields(self):
         return render_form_fields(
             self.category,
-            self.instance.data if self.instance else {})
+            self.instance.data if self.instance.data else {})
+
+
+def CategoryAdminForm(CategoryClass):
+    class FormClass(forms.ModelForm):
+
+        class Meta:
+            model = CategoryClass
+            fields = '__all__'
+            widgets = {
+                'params': JSONEditorWidget(),
+                'search_params': JSONEditorWidget()
+            }
+
+        class Media:
+            css = { 'all': ('/static/capybara_forms/css/jsoneditor.min.css',)}
+            js = ('/static/capybara_forms/js/jsoneditor.min.js', )
+
+    return FormClass

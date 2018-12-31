@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <p>Select your advert category:</p>
+    {% for category in categories %}
+        <li>
+            <a href="/add/{{ category.pk }}/">{{ category.title }}</a>
+        </li>
+    {% endfor %}
+{% endblock %}

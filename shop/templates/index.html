@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <p>We have some animals categories:</p>
+    <ul>
+    {% for category in categories %}
+        <li>
+            <a href="/{{ category.pk }}/">{{ category.title }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

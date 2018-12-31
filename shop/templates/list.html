@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="flex">
+        <div class="categories">
+            <p>Categories:</p>
+            {% for category in categories %}
+                <li>
+                    <a href="/{{ category.pk }}/">{{ category.title }}</a>
+                </li>
+            {% endfor %}
+        </div>
+
+        <div>
+            <p>Adverts:</p>
+            <ul>
+                {% for advert in adverts %}
+                    <li>
+                        <a href="/view/{{ advert.pk }}/">
+                            {{ advert.title }} for {{ advert.price }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="filter">
+            <p>Filter:</p>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <link rel="stylesheet" href="/static/capybara_forms/css/cpb_forms.css">
+    <form method="POST">
+        <p>
+            Title
+            {{ form.title }}
+        </p>
+        <p>
+            Price
+            {{ form.price }}
+        </p>
+        {{ form.render_fields | safe }}
+
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}

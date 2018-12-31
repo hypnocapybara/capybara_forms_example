@@ -7,6 +7,9 @@ class Category(CapybaraFormsCategory):
     title = models.CharField(
         max_length=100)
 
+    def __str__(self):
+        return self.title
+
 
 class Advert(CapybaraFormsModel(Category)):
     title = models.CharField(

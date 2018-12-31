@@ -1,0 +1,22 @@
+.wrapper {
+    width: 800px;
+    margin: 0 auto 40px;
+    position: relative;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.categories {
+    width: 200px;
+}
+
+.filter {
+    width: 200px;
+}
+
+label {
+    display: inline-block;
+}
