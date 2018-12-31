@@ -20,7 +20,7 @@ def render_field_to_template(template, field, advert_data, transform=None):
 
 
 def _render_form_string(field, advert_data):
-    return render_field_to_template('capybara_forms/string.html', field, advert_data)
+    return render_field_to_template('capybara_forms/form/string.html', field, advert_data)
 
 
 def _render_form_select(field, advert_data):
@@ -37,22 +37,22 @@ def _render_form_select(field, advert_data):
             key=field['options']
         ).order_by('value').values_list('pk', 'value')
 
-    return render_to_string('capybara_forms/select.html', {
+    return render_to_string('capybara_forms/form/select.html', {
         'field': field,
         'value': advert_data.get(field['name'], {}).get('value')
     })
 
 
 def _render_form_number(field, advert_data):
-    return render_field_to_template('capybara_forms/number.html', field, advert_data, 'float')
+    return render_field_to_template('capybara_forms/form/number.html', field, advert_data, 'float')
 
 
 def _render_form_checkbox(field, advert_data):
-    return render_field_to_template('capybara_forms/checkbox.html', field, advert_data, 'bool')
+    return render_field_to_template('capybara_forms/form/checkbox.html', field, advert_data, 'bool')
 
 
 def _render_form_color(field, advert_data):
-    return render_to_string('capybara_forms/color.html', {
+    return render_to_string('capybara_forms/form/color.html', {
         'field': field,
         'value': int(advert_data.get('color', {}).get('value', 0)),
         'colors': colors

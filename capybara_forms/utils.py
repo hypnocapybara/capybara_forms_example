@@ -1,4 +1,5 @@
 import re
+import json
 
 
 def get_data_fields(data):
@@ -10,10 +11,6 @@ def get_data_fields(data):
             if key:
                 key = key[0]
                 result[key] = data[item]
-
-    # for item in ['price_from', 'price_to', 'search']:
-    #     if item in data:
-    #         result[item] = data[item]
 
     return result
 
@@ -45,6 +42,56 @@ def get_filter_conditions(category_data, filter_values):
                     result[name + '__value'] = value == 'on'
 
     return {'data__' + key: result[key] for key in result}
+
+
+def get_advert_data_for_form_values(category_data, form_data):
+    result = {}
+    for field in category_data:
+        if 'type' in field:
+            field_type = field['type']
+            if field_type == 'color':
+                field_name = 'color'
+                display_name = u'Цвет'
+            else:
+                if 'name' not in field:
+                    continue
+
+                field_name = field['name']
+                display_name = field['display_name']
+
+            if field_name in form_data:
+                row = {
+                    'type': field['type'],
+                    'display_name': display_name,
+                    'value': form_data[field_name]
+                }
+
+                if field['type'] == 'select':
+                    row['value'], row['display_value'] = json.loads(form_data[field_name])
+                    if int(row['value']) == 0:
+                        continue
+
+                if field['type'] == 'checkbox':
+                    row['value'] = form_data[field_name] == 'on'
+
+                if field['type'] == 'number':
+                    row['value'] = float(form_data[field_name].replace(',', '.'))
+
+                result[field_name] = row
+
+    return result
+
+
+def validate_data(category, data):
+    result = []
+    # first, check requirement
+    for field in category.params:
+        if 'required' in field and field['required']:
+            valid = field['name'] in data and 'value' in data[field['name']] and data[field['name']]['value']
+            if not valid:
+                result.append((field['name'], u'Необходимо заполнить поле'))
+
+    return result
 
 
 def float_to_string(val):

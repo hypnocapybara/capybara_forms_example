@@ -14,7 +14,7 @@ class CapybaraFormsCategory(models.Model):
         abstract = True
 
 
-def CapybaraFormsAdvert(CategoryModel):
+def CapybaraFormsModel(CategoryModel):
     class CapybaraFormsAdvertClass(models.Model):
         category = models.ForeignKey(
             CategoryModel,

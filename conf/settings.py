@@ -67,7 +67,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'cpbf.wsgi.application'
+WSGI_APPLICATION = 'conf.wsgi.application'
 
 
 # Database
