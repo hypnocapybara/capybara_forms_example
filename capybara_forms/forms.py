@@ -2,7 +2,7 @@ from django import forms
 
 from capybara_forms.utils import get_advert_data_for_form_values, \
     validate_data, get_data_fields
-from capybara_forms.renderers.form import render_form_fields
+from capybara_forms.renderers.form import render_form_fields, render_fields_from_model
 from capybara_forms.widgets import JSONEditorWidget
 
 
@@ -10,6 +10,7 @@ class CapybaraFormsModelForm(forms.ModelForm):
     error_css_class = 'error'
     data_errors = {}  # {field_name: error_message}
     category = None
+    fields_in_model = []
 
     def __init__(self, category, *args, **kwargs):
         super(CapybaraFormsModelForm, self).__init__(*args, **kwargs)
@@ -53,7 +54,9 @@ class CapybaraFormsModelForm(forms.ModelForm):
         return instance
 
     def render_fields(self):
-        return render_form_fields(
+        return render_fields_from_model(
+            self, self.fields_in_model
+        ) + render_form_fields(
             self.category,
             self.instance.data if self.instance.data else {})
 

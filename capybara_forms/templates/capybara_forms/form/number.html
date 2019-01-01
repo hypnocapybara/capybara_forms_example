@@ -5,7 +5,8 @@
     </label>
     <div class="cpb_form_input__wrapper">
         <input id="cpb_form_input_{{ field.name }}" class="cpb_form_input cpb_form_input-number"
-               name="data[{{ field.name }}]" placeholder="{{ field.placeholder }}" step="any"
+               name="{% if field.full_name %}{{ field.full_name }}{% else %}data[{{ field.name }}]{% endif %}"
+               placeholder="{{ field.placeholder }}" step="any"
                {% if field.min_value %}min="{{ field.min_value }}"{% endif %}
                {% if field.max_value %}max="{{ field.max_value }}"{% endif %}
                type="number"
@@ -21,7 +22,8 @@
 {% else %}
     <div class="cpb_form_input__wrapper">
         <input id="cpb_form_input_{{ field.name }}" class="cpb_form_input cpb_form_input-number"
-               name="data[{{ field.name }}]" placeholder="{{ field.display_name }}" step="any"
+               name="{% if field.full_name %}{{ field.full_name }}{% else %}data[{{ field.name }}]{% endif %}"
+               placeholder="{{ field.display_name }}" step="any"
                {% if field.min_value %}min="{{ field.min_value }}"{% endif %}
                {% if field.max_value %}max="{{ field.max_value }}"{% endif %}
                {% if field.required %}data-parsley-required{% endif %}

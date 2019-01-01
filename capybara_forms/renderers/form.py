@@ -1,5 +1,8 @@
 import re
+
 from django.template.loader import render_to_string
+from django.db.models.fields import CharField, \
+    IntegerField, FloatField, BooleanField
 
 from capybara_forms.models import SelectData
 from capybara_forms.defines import colors
@@ -102,6 +105,36 @@ def render_form_fields(category, advert_data):
         ]
 
         return '\n'.join(form_groups)
+
+
+def render_fields_from_model(form, fields):
+    result = []
+    model = form.Meta.model
+
+    for field in fields:
+        field_type = model._meta.get_field(field)
+        if isinstance(field_type, IntegerField) or isinstance(field_type, FloatField):
+            field_class = 'number'
+        elif isinstance(field_type, BooleanField):
+            field_class = 'checkbox'
+        elif isinstance(field_type, CharField):
+            field_class = 'string'
+        else:
+            continue
+
+        data = {
+            'type': field_class,
+            'name': field,
+            'required': not getattr(field_type, 'blank', False) is True,
+            'display_name': field_type.verbose_name.title(),
+            'placeholder': form.fields[field].widget.attrs.get('placeholder', ''),
+            'full_name': field
+        }
+        render_function = FIELD_TYPES_TO_FUNCTIONS[field_class]
+        result.append('<div class="cpb_form_item">' + render_function(data, {}) + '</div>')
+
+    return '\n'.join(result)
+
 
 
 def render_advert_fields(advert):

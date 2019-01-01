@@ -6,14 +6,6 @@
 
     <div class="form_wrapper">
         <form method="POST" data-parsley-validate>
-            <p>
-                Title
-                {{ form.title }}
-            </p>
-            <p>
-                Price
-                {{ form.price }}
-            </p>
             {{ form.render_fields | safe }}
 
             <button type="submit">Submit</button>

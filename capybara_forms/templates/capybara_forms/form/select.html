@@ -5,7 +5,7 @@
 
 <div class="cpb_form_input__wrapper">
     <select id="cpb_form_input_{{ field.name }}" class="cpb_form_input cpb_form_input-select"
-            name="data[{{ field.name }}]"
+            name="{% if field.full_name %}{{ field.full_name }}{% else %}data[{{ field.name }}]{% endif %}"
             {% if field.required %}data-parsley-required{% endif %}
             data-parsley-errors-container="#cpb_form_error_{{ field.name }}">
         <option value='[0,"Не выбрано"]'>
