@@ -20,3 +20,7 @@
 label {
     display: inline-block;
 }
+
+.form_wrapper {
+    max-width: 400px;
+}

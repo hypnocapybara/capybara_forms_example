@@ -23,6 +23,9 @@ def CapybaraFormsModel(CategoryModel):
             blank=True, null=True,
             verbose_name='Category fields data')
 
+        render_from_model = []  # Fields from model, that needs to be rendered with form.render_fields
+        render_in_filter = []  # Filter fields from model, that needs to be rendered in filter
+
         class Meta:
             abstract = True
 

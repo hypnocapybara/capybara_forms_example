@@ -1,21 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <link rel="stylesheet" href="/static/capybara_forms/css/cpb_forms.css">
     <script src="/static/capybara_forms/js/jquery-3.3.1.min.js"></script>
     <script src="/static/capybara_forms/js/parsley.min.js"></script>
 
-    <form method="POST" data-parsley-validate>
-        <p>
-            Title
-            {{ form.title }}
-        </p>
-        <p>
-            Price
-            {{ form.price }}
-        </p>
-        {{ form.render_fields | safe }}
+    <div class="form_wrapper">
+        <form method="POST" data-parsley-validate>
+            <p>
+                Title
+                {{ form.title }}
+            </p>
+            <p>
+                Price
+                {{ form.price }}
+            </p>
+            {{ form.render_fields | safe }}
 
-        <button type="submit">Submit</button>
-    </form>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 {% endblock %}
