@@ -2,7 +2,10 @@
 
 {% block content %}
     <link rel="stylesheet" href="/static/capybara_forms/css/cpb_forms.css">
-    <form method="POST">
+    <script src="/static/capybara_forms/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/capybara_forms/js/parsley.min.js"></script>
+
+    <form method="POST" data-parsley-validate>
         <p>
             Title
             {{ form.title }}

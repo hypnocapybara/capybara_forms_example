@@ -6,19 +6,17 @@
     <div class="cpb_form_input__wrapper">
         <input id="cpb_form_input_{{ field.name }}" class="cpb_form_input cpb_form_input-string"
                name="data[{{ field.name }}]" placeholder="{{ field.placeholder }}"
-               onchange="validate_on_change('{{ field.name }}')"{% if value %} value="{{ value }}"{% endif %}>
+               {% if field.required %}data-parsley-required{% endif %}
+               data-parsley-errors-container="#cpb_form_error_{{ field.name }}"
+               {% if value %} value="{{ value }}"{% endif %}>
     </div>
 {% else %}
     <div class="cpb_form_input__wrapper">
         <input id="cpb_form_input_{{ field.name }}" class="cpb_form_input cpb_form_input-string"
                name="data[{{ field.name }}]" placeholder="{{ field.display_name }}"
-               onchange="validate_on_change('{{ field.name }}')"{% if value %} value="{{ value }}"{% endif %}>
+               {% if field.required %}data-parsley-required{% endif %}
+               data-parsley-errors-container="#cpb_form_error_{{ field.name }}"
+               {% if value %} value="{{ value }}"{% endif %}>
     </div>
 {% endif %}
 <div id="cpb_form_error_{{ field.name }}" class="cpb_form_error cpb_form_error-string"></div>
-
-{% if field.required %}
-    <script type="text/javascript">
-        required_fields.push('{{ field.name }}');
-    </script>
-{% endif %}
