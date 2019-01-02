@@ -15,7 +15,7 @@ class CapybaraFormsCategory(models.Model):
 
 
 def CapybaraFormsModel(CategoryModel):
-    class CapybaraFormsAdvertClass(models.Model):
+    class CapybaraFormsEntryClass(models.Model):
         category = models.ForeignKey(
             CategoryModel,
             on_delete=models.CASCADE)
@@ -26,7 +26,7 @@ def CapybaraFormsModel(CategoryModel):
         class Meta:
             abstract = True
 
-    return CapybaraFormsAdvertClass
+    return CapybaraFormsEntryClass
 
 
 class SelectData(models.Model):

@@ -4,7 +4,7 @@ from capybara_forms.renderers.filter import render_filter_fields
 from capybara_forms.utils import get_advert_data_for_form_values, \
     validate_data, get_data_fields, get_filter_conditions
 from capybara_forms.renderers.form import render_form_fields, \
-    render_form_fields_from_model
+    render_form_fields_from_model, render_advert_fields
 from capybara_forms.widgets import JSONEditorWidget
 
 
@@ -52,6 +52,7 @@ class CapybaraFormsModelForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super(CapybaraFormsModelForm, self).save(commit=False)
+        instance.category = self.category
         instance_data = get_data_fields(self.data)
         instance.data = get_advert_data_for_form_values(self.category.params, instance_data)
 
@@ -83,8 +84,8 @@ class CapybaraFormsModelForm(forms.ModelForm):
         })
         return render_filter_fields(self, data_fields)
 
-    def render_advert_fields(self):
-        pass
+    def render_item(self):
+        return render_advert_fields(self.instance)
 
     def get_default_filter_template(self):
         return None

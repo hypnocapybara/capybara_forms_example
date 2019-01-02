@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from capybara_forms.renderers.filter import render_filter_fields
 from capybara_forms.utils import get_data_fields
@@ -20,7 +20,14 @@ def add_index(request):
 
 def add(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
-    form = AdvertForm(category)
+    if request.method == 'POST':
+        form = AdvertForm(category, request.POST.dict())
+        if form.is_valid():
+            form.save()
+            return redirect('/{0}/'.format(category_id))
+    else:
+        form = AdvertForm(category)
+
     return render(request, 'add.html', {
         'form': form,
     })
@@ -38,4 +45,10 @@ def list(request, category_id):
 
 
 def detail(request, item_id):
-    pass
+    item = get_object_or_404(Advert, pk=item_id)
+    form = AdvertForm(item.category, instance=item)
+
+    return render(request, 'detail.html', {
+        'item': item,
+        'form': form
+    })

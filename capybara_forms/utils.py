@@ -76,7 +76,7 @@ def get_advert_data_for_form_values(category_data, form_data):
 
                 field_name = field['name']
 
-            display_name = field['display_name']
+            display_name = field['display_name'] if 'display_name' in field else field_name.title()
 
             if field_name in form_data:
                 row = {

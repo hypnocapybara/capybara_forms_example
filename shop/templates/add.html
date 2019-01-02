@@ -6,6 +6,7 @@
 
     <div class="form_wrapper">
         <form method="POST" data-parsley-validate>
+            {% csrf_token %}
             {{ form.render_form | safe }}
 
             <button type="submit">Submit</button>
