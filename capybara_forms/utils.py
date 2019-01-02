@@ -46,7 +46,7 @@ def get_filter_conditions(category_data, fields_in_filter, filter_values):
                     result['data__' + name + '__value'] = value == 'on'
 
     for name in fields_in_filter:
-        if name in filter_values:
+        if filter_values.get(name, ''):
             value = filter_values[name]
             modifier = ''
 

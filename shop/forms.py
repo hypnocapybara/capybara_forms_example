@@ -14,7 +14,7 @@ class AdvertForm(CapybaraFormsModelForm):
             'placeholder': 'Enter price of your animal'
         }
     }
-    fields_in_filter = ['price_from', 'price_to']
+    fields_in_filter = ['price_from', 'price_to', 'period']
     fields_in_filter_override = {
         'price_from': {
             'placeholder': 'from',
