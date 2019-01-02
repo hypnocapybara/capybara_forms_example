@@ -12,7 +12,8 @@ class CapybaraFormsModelForm(forms.ModelForm):
     error_css_class = 'error'
     data_errors = {}  # {field_name: error_message}
     category = None
-    fields_in_model = []
+
+    fields_in_model = []  # Fields in Meta.model needs to be rendered in form
     fields_in_model_override = {}
     fields_in_filter = []
     fields_in_filter_override = {}
@@ -61,8 +62,12 @@ class CapybaraFormsModelForm(forms.ModelForm):
 
     def filter_adverts(self):
         queryset = self._meta.model.objects.filter(category=self.category)
+        filter_values = get_data_fields(self.data)
+        filter_values.update({
+            field: self.data.get(field, '') for field in self.fields_in_filter if field in self.data
+        })
         conditions = get_filter_conditions(
-            self.category.search_params, self.fields_in_filter, self.data)
+            self.category.search_params, self.fields_in_filter, filter_values)
         queryset = queryset.filter(**conditions)
         return queryset
 
