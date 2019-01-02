@@ -75,7 +75,7 @@ class CapybaraFormsModelForm(forms.ModelForm):
         data_fields.update({
             field: self.data.get(field, '') for field in self.fields_in_filter if field in self.data
         })
-        return render_filter_fields(self.category, [], data_fields)
+        return render_filter_fields(self.category, self, data_fields)
 
     def render_advert_fields(self):
         pass

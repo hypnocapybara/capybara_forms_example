@@ -3,6 +3,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 
 from capybara_forms.models import SelectData
+from capybara_forms.utils import django_field_to_capybara_field
 
 
 def _render_filter_string(field, filter_values):
@@ -72,9 +73,20 @@ FILTER_FIELD_TYPES_TO_FUNCTIONS = {
 }
 
 
-def render_filter_fields(category, fields_in_filter, filter_values):
+def render_filter_fields(category, form, filter_values):
     data = category.search_params
     form_groups = {}
+
+    fields_in_filter = getattr(form, 'fields_in_filter', [])
+    for field in fields_in_filter:
+        field_data = django_field_to_capybara_field(form, field)
+        if field_data and field_data['type'] in FILTER_FIELD_TYPES_TO_FUNCTIONS:
+            if field_data['name'] in filter_values:
+                field_data['value'] = filter_values[field_data['name']]
+
+            render_function = FILTER_FIELD_TYPES_TO_FUNCTIONS[field_data['type']]
+            form_groups[field] = render_function(field_data, filter_values)
+
     for field in data:
         if 'type' in field and field['type'] in FILTER_FIELD_TYPES_TO_FUNCTIONS:
             if field['name'] in filter_values:

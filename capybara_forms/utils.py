@@ -1,6 +1,7 @@
 import re
 import json
 
+from django.core.exceptions import FieldDoesNotExist
 from django.db.models.fields import CharField, \
     IntegerField, FloatField, BooleanField
 
@@ -112,8 +113,24 @@ def validate_data(category, data):
     return result
 
 
-def django_field_to_capybara_field(model, field, placeholder=''):
-    field_type = model._meta.get_field(field)
+def django_field_to_capybara_field(form, field):
+    model = form.Meta.model
+    field_name = field
+
+    try:
+        field_type = model._meta.get_field(field)
+    except FieldDoesNotExist:
+        if field.endswith('_from'):
+            field_name = field
+            field = field[:-5]
+        elif field.endswith('_to'):
+            field_name = field
+            field = field[:-3]
+        else:
+            return {}
+
+        field_type = model._meta.get_field(field)
+
     if isinstance(field_type, IntegerField) or isinstance(field_type, FloatField):
         field_class = 'number'
     elif isinstance(field_type, BooleanField):
@@ -125,11 +142,11 @@ def django_field_to_capybara_field(model, field, placeholder=''):
 
     return {
         'type': field_class,
-        'name': field,
+        'name': field_name,
         'required': not getattr(field_type, 'blank', False) is True,
         'display_name': field_type.verbose_name.title(),
-        'placeholder': placeholder,
-        'full_name': field
+        'placeholder': form.fields[field].widget.attrs.get('placeholder', ''),
+        'full_name': field_name
     }
 
 

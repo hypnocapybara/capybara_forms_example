@@ -111,11 +111,9 @@ def render_form_fields(category, advert_data):
 
 def render_form_fields_from_model(form, fields):
     result = []
-    model = form.Meta.model
 
     for field in fields:
-        placeholder = form.fields[field].widget.attrs.get('placeholder', '')
-        data = django_field_to_capybara_field(model, field, placeholder)
+        data = django_field_to_capybara_field(form, field)
         render_function = FIELD_TYPES_TO_FUNCTIONS[data['type']]
         result.append('<div class="cpb_form_item">' + render_function(data, {}) + '</div>')
 
