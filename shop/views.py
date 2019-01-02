@@ -32,7 +32,7 @@ def list(request, category_id):
 
     return render(request, 'list.html', {
         'categories': Category.objects.all(),
-        'adverts': Advert.objects.filter(category=category),
+        'adverts': form.filter_adverts(),
         'form': form,
     })
 

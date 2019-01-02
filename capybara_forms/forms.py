@@ -2,7 +2,7 @@ from django import forms
 
 from capybara_forms.renderers.filter import render_filter_fields
 from capybara_forms.utils import get_advert_data_for_form_values, \
-    validate_data, get_data_fields
+    validate_data, get_data_fields, get_filter_conditions
 from capybara_forms.renderers.form import render_form_fields, \
     render_form_fields_from_model
 from capybara_forms.widgets import JSONEditorWidget
@@ -56,6 +56,13 @@ class CapybaraFormsModelForm(forms.ModelForm):
 
         return instance
 
+    def filter_adverts(self):
+        queryset = self._meta.model.objects.filter(category=self.category)
+        conditions = get_filter_conditions(
+            self.category.search_params, self.fields_in_filter, self.data)
+        queryset = queryset.filter(**conditions)
+        return queryset
+
     def render_form(self):
         return render_form_fields_from_model(
             self, self.fields_in_model
@@ -65,6 +72,9 @@ class CapybaraFormsModelForm(forms.ModelForm):
 
     def render_filter(self):
         data_fields = get_data_fields(self.data)
+        data_fields.update({
+            field: self.data.get(field, '') for field in self.fields_in_filter if field in self.data
+        })
         return render_filter_fields(self.category, [], data_fields)
 
     def render_advert_fields(self):

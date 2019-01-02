@@ -45,21 +45,19 @@ def get_filter_conditions(category_data, fields_in_filter, filter_values):
                     result['data__' + name + '__value'] = value == 'on'
 
     for name in fields_in_filter:
-        field = name
+        if name in filter_values:
+            value = filter_values[name]
+            modifier = ''
 
-        if field in filter_values:
-            value = filter_values[field]
-            result[name] = value
+            if name.endswith('_from'):
+                name = name[:-5]
+                modifier = '__gte'
 
-        field = name + '_from'
-        if field in filter_values:
-            value = filter_values[field]
-            result[name + '__gte'] = value
+            if name.endswith('_to'):
+                name = name[:-3]
+                modifier = '__lte'
 
-        field = name + '_to'
-        if field in filter_values:
-            value = filter_values[field]
-            result[name + '__lte'] = value
+            result[name + modifier] = value
 
     return result
 
