@@ -26,7 +26,8 @@ class CapybaraFormsModelForm(forms.ModelForm):
         ret = super(CapybaraFormsModelForm, self).is_valid()
         for f in self.errors:
             self.fields[f].widget.attrs.update({
-                'class': self.fields[f].widget.attrs.get('class', '') + ' error'
+                'class': self.fields[f].widget.attrs.get('class', '') +
+                         ' {0}'.format(self.error_css_class)
             })
 
         instance_data = get_data_fields(self.data)
@@ -66,9 +67,7 @@ class CapybaraFormsModelForm(forms.ModelForm):
         return queryset
 
     def render_form(self):
-        return render_form_fields_from_model(
-            self
-        ) + render_form_fields(
+        return render_form_fields_from_model(self) + render_form_fields(
             self.category,
             self.instance.data if self.instance.data else {})
 
@@ -81,6 +80,9 @@ class CapybaraFormsModelForm(forms.ModelForm):
 
     def render_advert_fields(self):
         pass
+
+    def get_default_filter_template(self):
+        return None
 
 
 def CategoryAdminForm(CategoryClass):

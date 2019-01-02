@@ -111,8 +111,23 @@ def render_filter_fields(form, filter_values):
 
         return result
     else:
-        form_groups = [
-            '<div class="cpb_form_item">' + form_groups[field['name']] + '</div>'
-            for field in data if 'type' in field and field['type'] in FILTER_FIELD_TYPES_TO_FUNCTIONS
-        ]
-        return '\n'.join(form_groups)
+        default_template = form.get_default_filter_template()
+        if default_template:
+            model_content = default_template
+            for field_name in form.fields_in_filter:
+                model_content = model_content.replace('{' + field_name + '}',
+                                                      '<div class="cpb_form_item">' +
+                                                      form_groups[field_name] +
+                                                      '</div>')
+        else:
+            model_content = '\n'.join([
+                '<div class="cpb_form_item">' + form_groups[field] + '</div>'
+                for field in form.fields_in_filter
+            ])
+
+        category_content = '\n'.join([
+            '<div class="cpb_form_item">' + form_groups[field] + '</div>'
+            for field in data if field in form_groups
+        ])
+
+        return model_content + category_content

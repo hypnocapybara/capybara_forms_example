@@ -70,13 +70,13 @@ def get_advert_data_for_form_values(category_data, form_data):
             field_type = field['type']
             if field_type == 'color':
                 field_name = 'color'
-                display_name = u'Цвет'
             else:
                 if 'name' not in field:
                     continue
 
                 field_name = field['name']
-                display_name = field['display_name']
+
+            display_name = field['display_name']
 
             if field_name in form_data:
                 row = {

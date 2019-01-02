@@ -1,4 +1,5 @@
 from django import forms
+from django.template.loader import render_to_string
 
 from capybara_forms.forms import CapybaraFormsModelForm
 
@@ -26,6 +27,9 @@ class AdvertForm(CapybaraFormsModelForm):
     }
 
     title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Enter title'}))
+
+    def get_default_filter_template(self):
+        return render_to_string('parts/filter.html')
 
     class Meta:
         model = Advert
