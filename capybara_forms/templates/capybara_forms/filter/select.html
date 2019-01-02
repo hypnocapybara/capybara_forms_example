@@ -4,7 +4,7 @@
     </label>
     <select id="cpb_form_input_{{ field.name }}" class="cpb_form_input cpb_form_input-select"
            name="data[{{ field.name }}]">
-        <option value="0">Не выбрано</option>
+        <option value="0">{{ not_selected }}</option>
         {% for option in field.options %}
             <option value="{{ option.0 }}"{% if field.value == option.0 %} selected{% endif %}>{{ option.1 }}</option>
         {% endfor %}
@@ -12,7 +12,7 @@
 {% else %}
     <select id="cpb_form_input_{{ field.name }}" class="cpb_form_input cpb_form_input-select"
            name="data[{{ field.name }}]">
-        <option value="0">Не выбрано</option>
+        <option value="0">{{ not_selected }}</option>
         {% for option in field.options %}
             <option value="{{ option.0 }}"{% if field.value == option.0 %} selected{% endif %}>{{ option.1 }}</option>
         {% endfor %}

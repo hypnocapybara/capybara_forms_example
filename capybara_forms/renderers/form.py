@@ -3,6 +3,7 @@ import re
 from django.template.loader import render_to_string
 from django.db.models.fields import CharField, \
     IntegerField, FloatField, BooleanField
+from django.conf import settings
 
 from capybara_forms.models import SelectData
 from capybara_forms.defines import colors
@@ -27,6 +28,8 @@ def _render_form_string(field, advert_data):
 
 
 def _render_form_select(field, advert_data):
+    not_selected = getattr(settings, 'CAPYBARA_FORMS_NOT_SELECTED', 'Not selected')
+
     if 'nested_on' in field:
         field['nested_prefix'] = field['options']
 
@@ -42,7 +45,8 @@ def _render_form_select(field, advert_data):
 
     return render_to_string('capybara_forms/form/select.html', {
         'field': field,
-        'value': advert_data.get(field['name'], {}).get('value')
+        'value': advert_data.get(field['name'], {}).get('value'),
+        'not_selected': not_selected
     })
 
 

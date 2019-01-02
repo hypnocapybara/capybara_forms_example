@@ -1,5 +1,6 @@
 import re
 from django.template.loader import render_to_string
+from django.conf import settings
 
 from capybara_forms.models import SelectData
 
@@ -9,6 +10,8 @@ def _render_filter_string(field, filter_values):
 
 
 def _render_filter_select(field, filter_values):
+    not_selected = getattr(settings, 'CAPYBARA_FORMS_NOT_SELECTED', 'Not selected')
+
     if 'nested_on' in field:
         field['nested_prefix'] = field['options']
 
@@ -25,7 +28,10 @@ def _render_filter_select(field, filter_values):
     if field.get('value') is not None:
         field['value'] = int(field['value'])
 
-    return render_to_string('capybara_forms/filter/select.html', {'field': field})
+    return render_to_string('capybara_forms/filter/select.html', {
+        'field': field,
+        'not_selected': not_selected
+    })
 
 
 def _render_filter_number(field, filter_values):
@@ -45,8 +51,12 @@ def _render_filter_number_select(field, filter_values):
                 current += step
 
     field['value'] = field.get('value', '0')
-    return render_to_string('capybara_forms/filter/number_select.html',
-                            {'field': field})
+    not_selected = getattr(settings, 'CAPYBARA_FORMS_NOT_SELECTED', 'Not selected')
+
+    return render_to_string('capybara_forms/filter/number_select.html', {
+        'field': field,
+        'not_selected': not_selected
+    })
 
 
 def _render_filter_checkbox(field, filter_values):
