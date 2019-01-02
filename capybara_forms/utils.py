@@ -1,6 +1,9 @@
 import re
 import json
 
+from django.db.models.fields import CharField, \
+    IntegerField, FloatField, BooleanField
+
 
 def get_data_fields(data):
     result = {}
@@ -15,7 +18,7 @@ def get_data_fields(data):
     return result
 
 
-def get_filter_conditions(category_data, filter_values):
+def get_filter_conditions(category_data, fields_in_filter, filter_values):
     result = {}
 
     for data_item in category_data:
@@ -35,13 +38,30 @@ def get_filter_conditions(category_data, filter_values):
                     modifier = '__lte'
 
                 if data_item['type'] == 'select' and int(value) > 0:
-                    result[name + '__value' + modifier] = int(value)
+                    result['data__' + name + '__value' + modifier] = int(value)
                 elif data_item['type'] in ['number', 'number_select'] and float(value) > 0:
-                    result[name + '__value' + modifier] = float(value)
+                    result['data__' + name + '__value' + modifier] = float(value)
                 elif data_item['type'] == 'checkbox':
-                    result[name + '__value'] = value == 'on'
+                    result['data__' + name + '__value'] = value == 'on'
 
-    return {'data__' + key: result[key] for key in result}
+    for name in fields_in_filter:
+        field = name
+
+        if field in filter_values:
+            value = filter_values[field]
+            result[name] = value
+
+        field = name + '_from'
+        if field in filter_values:
+            value = filter_values[field]
+            result[name + '__gte'] = value
+
+        field = name + '_to'
+        if field in filter_values:
+            value = filter_values[field]
+            result[name + '__lte'] = value
+
+    return result
 
 
 def get_advert_data_for_form_values(category_data, form_data):
@@ -92,6 +112,27 @@ def validate_data(category, data):
                 result.append((field['name'], u'Необходимо заполнить поле'))
 
     return result
+
+
+def django_field_to_capybara_field(model, field, placeholder=''):
+    field_type = model._meta.get_field(field)
+    if isinstance(field_type, IntegerField) or isinstance(field_type, FloatField):
+        field_class = 'number'
+    elif isinstance(field_type, BooleanField):
+        field_class = 'checkbox'
+    elif isinstance(field_type, CharField):
+        field_class = 'string'
+    else:
+        return {}
+
+    return {
+        'type': field_class,
+        'name': field,
+        'required': not getattr(field_type, 'blank', False) is True,
+        'display_name': field_type.verbose_name.title(),
+        'placeholder': placeholder,
+        'full_name': field
+    }
 
 
 def float_to_string(val):

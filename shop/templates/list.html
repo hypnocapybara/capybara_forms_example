@@ -28,7 +28,7 @@
             <p>Filter:</p>
             <form method="get" action="{{ request.path }}">
                 <div class="form-group" id="id_filter">
-                    {{ filter_html|safe }}
+                    {{ form.render_filter | safe }}
                 </div>
 
                 <hr>

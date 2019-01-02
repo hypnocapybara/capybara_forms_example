@@ -72,7 +72,7 @@ FILTER_FIELD_TYPES_TO_FUNCTIONS = {
 }
 
 
-def render_filter_fields(category, filter_values):
+def render_filter_fields(category, fields_in_filter, filter_values):
     data = category.search_params
     form_groups = {}
     for field in data:
@@ -84,10 +84,10 @@ def render_filter_fields(category, filter_values):
             form_groups[field['name']] = render_function(field, filter_values)
 
     if category.filter_template:
-        fields_in_filter = re.findall('{(\w+)}', category.filter_template)
+        fields = re.findall('{(\w+)}', category.filter_template)
         result = category.filter_template
         for field_name in form_groups:
-            if field_name in fields_in_filter:
+            if field_name in fields:
                 result = result.replace('{' + field_name + '}',
                                         '<div class="cpb_form_item">' +
                                         form_groups[field_name] +

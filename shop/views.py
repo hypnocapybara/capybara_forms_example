@@ -28,13 +28,12 @@ def add(request, category_id):
 
 def list(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
-    data_fields = get_data_fields(request.GET)
-    filter_html = render_filter_fields(category, data_fields)
+    form = AdvertForm(category, data=request.GET)
 
     return render(request, 'list.html', {
         'categories': Category.objects.all(),
         'adverts': Advert.objects.filter(category=category),
-        'filter_html': filter_html
+        'form': form,
     })
 
 
