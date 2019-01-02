@@ -7,7 +7,7 @@ from shop.models import Advert
 
 
 class AdvertForm(CapybaraFormsModelForm):
-    fields_in_model = ['title', 'price']
+    fields_in_model = ['title', 'price', 'period']
     fields_in_model_override = {
         'price': {
             'display_name': 'La priece',
@@ -33,4 +33,4 @@ class AdvertForm(CapybaraFormsModelForm):
 
     class Meta:
         model = Advert
-        fields = ('title', 'price')
+        fields = ('title', 'price', 'period')

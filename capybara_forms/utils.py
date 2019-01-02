@@ -131,23 +131,28 @@ def django_field_to_capybara_field(form, field):
 
         field_type = model._meta.get_field(field)
 
-    if isinstance(field_type, IntegerField) or isinstance(field_type, FloatField):
-        field_class = 'number'
+    if getattr(field_type, 'choices', ()):
+        result = {
+            'type': 'select',
+            'options': [list(item) for item in field_type.choices]
+        }
+    elif isinstance(field_type, IntegerField) or isinstance(field_type, FloatField):
+        result = {'type': 'number'}
     elif isinstance(field_type, BooleanField):
-        field_class = 'checkbox'
+        result = {'type': 'checkbox'}
     elif isinstance(field_type, CharField):
-        field_class = 'string'
+        result = {'type': 'string'}
     else:
         return {}
 
-    return {
-        'type': field_class,
+    result.update({
         'name': field_name,
         'required': not getattr(field_type, 'blank', False) is True,
         'display_name': field_type.verbose_name.title(),
         'placeholder': form.fields[field].widget.attrs.get('placeholder', ''),
         'full_name': field_name
-    }
+    })
+    return result
 
 
 def float_to_string(val):
