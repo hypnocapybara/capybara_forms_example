@@ -73,13 +73,17 @@ FILTER_FIELD_TYPES_TO_FUNCTIONS = {
 }
 
 
-def render_filter_fields(category, form, filter_values):
+def render_filter_fields(form, filter_values):
+    category = form.category
     data = category.search_params
     form_groups = {}
 
     fields_in_filter = getattr(form, 'fields_in_filter', [])
     for field in fields_in_filter:
         field_data = django_field_to_capybara_field(form, field)
+        if field in form.fields_in_filter_override:
+            field_data.update(form.fields_in_filter_override[field])
+
         if field_data and field_data['type'] in FILTER_FIELD_TYPES_TO_FUNCTIONS:
             if field_data['name'] in filter_values:
                 field_data['value'] = filter_values[field_data['name']]

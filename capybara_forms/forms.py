@@ -13,7 +13,9 @@ class CapybaraFormsModelForm(forms.ModelForm):
     data_errors = {}  # {field_name: error_message}
     category = None
     fields_in_model = []
+    fields_in_model_override = {}
     fields_in_filter = []
+    fields_in_filter_override = {}
 
     def __init__(self, category, *args, **kwargs):
         super(CapybaraFormsModelForm, self).__init__(*args, **kwargs)
@@ -65,7 +67,7 @@ class CapybaraFormsModelForm(forms.ModelForm):
 
     def render_form(self):
         return render_form_fields_from_model(
-            self, self.fields_in_model
+            self
         ) + render_form_fields(
             self.category,
             self.instance.data if self.instance.data else {})
@@ -75,7 +77,7 @@ class CapybaraFormsModelForm(forms.ModelForm):
         data_fields.update({
             field: self.data.get(field, '') for field in self.fields_in_filter if field in self.data
         })
-        return render_filter_fields(self.category, self, data_fields)
+        return render_filter_fields(self, data_fields)
 
     def render_advert_fields(self):
         pass

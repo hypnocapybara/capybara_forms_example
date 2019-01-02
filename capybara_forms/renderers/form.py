@@ -109,11 +109,15 @@ def render_form_fields(category, advert_data):
         return '\n'.join(form_groups)
 
 
-def render_form_fields_from_model(form, fields):
+def render_form_fields_from_model(form):
     result = []
+    fields = form.fields_in_model
 
     for field in fields:
         data = django_field_to_capybara_field(form, field)
+        if field in form.fields_in_model_override:
+            data.update(form.fields_in_model_override[field])
+
         render_function = FIELD_TYPES_TO_FUNCTIONS[data['type']]
         result.append('<div class="cpb_form_item">' + render_function(data, {}) + '</div>')
 
