@@ -1,0 +1,1 @@
+# Capybara forms example
