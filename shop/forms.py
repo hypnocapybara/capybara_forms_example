@@ -34,3 +34,4 @@ class AdvertForm(CapybaraFormsModelForm):
     class Meta:
         model = Advert
         fields = ('title', 'price', 'period')
+

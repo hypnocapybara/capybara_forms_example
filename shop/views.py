@@ -1,7 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
 
-from capybara_forms.renderers.filter import render_filter_fields
-from capybara_forms.utils import get_data_fields
 from shop.models import Category, Advert
 from shop.forms import AdvertForm
 

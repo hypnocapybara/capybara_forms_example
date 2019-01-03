@@ -23,7 +23,6 @@ class AdvertPublicationPeriod:
 
 
 class Advert(CapybaraFormsModel(Category)):
-    title = models.CharField(
-        max_length=100)
+    title = models.CharField(max_length=100)
     price = models.PositiveSmallIntegerField()
     period = models.PositiveIntegerField(choices=AdvertPublicationPeriod.CHOICES)
